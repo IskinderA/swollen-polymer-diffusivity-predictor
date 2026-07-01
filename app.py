@@ -1,7 +1,7 @@
 import streamlit as st
 from predictor.interpretation import classify_model_agreement
 from predictor.downloads import prediction_summary_csv
-from predictor.predict import predict_placeholder
+from predictor.predict import PredictionResult, predict_placeholder
 
 MANUSCRIPT_TITLE = (
     "Predicting Solute Diffusivity in Swollen Polymer Systems "
@@ -19,14 +19,7 @@ DISCLAIMER = (
 def show_disclaimer() -> None:
     st.info(DISCLAIMER)
 
-def show_prediction_summary(
-    qrf_p5: float,
-    qrf_p50: float,
-    qrf_p95: float,
-    mlp_p5: float,
-    mlp_p50: float,
-    mlp_p95: float,
-) -> None:
+def show_prediction_summary(pred: PredictionResult) -> None:
     st.divider()
     st.header("Prediction Summary")
 
@@ -34,17 +27,17 @@ def show_prediction_summary(
 
     with col1:
         st.subheader("QRF Prediction Distribution")
-        st.metric("5th percentile log10(D)", f"{qrf_p5:.3f}")
-        st.metric("Median log10(D)", f"{qrf_p50:.3f}")
-        st.metric("95th percentile log10(D)", f"{qrf_p95:.3f}")
+        st.metric("5th percentile log10(D)", f"{pred.qrf.p5:.3f}")
+        st.metric("Median log10(D)", f"{pred.qrf.p50:.3f}")
+        st.metric("95th percentile log10(D)", f"{pred.qrf.p95:.3f}")
 
     with col2:
         st.subheader("MLP Ensemble Prediction Distribution")
-        st.metric("5th percentile log10(D)", f"{mlp_p5:.3f}")
-        st.metric("Median log10(D)", f"{mlp_p50:.3f}")
-        st.metric("95th percentile log10(D)", f"{mlp_p95:.3f}")
+        st.metric("5th percentile log10(D)", f"{pred.mlp.p5:.3f}")
+        st.metric("Median log10(D)", f"{pred.mlp.p50:.3f}")
+        st.metric("95th percentile log10(D)", f"{pred.mlp.p95:.3f}")
 
-    delta = abs(qrf_p50 - mlp_p50)
+    delta = abs(pred.qrf.p50 - pred.mlp.p50)
     agreement_label, agreement_text = classify_model_agreement(delta)
 
     st.subheader("Model Agreement")
@@ -64,12 +57,12 @@ def show_prediction_summary(
     st.download_button(
         "Download placeholder CSV",
         data=prediction_summary_csv(
-            qrf_p5=qrf_p5,
-            qrf_p50=qrf_p50,
-            qrf_p95=qrf_p95,
-            mlp_p5=mlp_p5,
-            mlp_p50=mlp_p50,
-            mlp_p95=mlp_p95,
+            qrf_p5=pred.qrf.p5,
+            qrf_p50=pred.qrf.p50,
+            qrf_p95=pred.qrf.p95,
+            mlp_p5=pred.mlp.p5,
+            mlp_p50=pred.mlp.p50,
+            mlp_p95=pred.mlp.p95,
         ),
         file_name="prediction_summary_placeholder.csv",
         mime="text/csv",
@@ -113,14 +106,8 @@ if mode == "Known System":
 
     if st.button("Predict", key="known_predict"):
         pred = predict_placeholder()
-        show_prediction_summary(
-            qrf_p5=pred.qrf.p5,
-            qrf_p50=pred.qrf.p50,
-            qrf_p95=pred.qrf.p95,
-            mlp_p5=pred.mlp.p5,
-            mlp_p50=pred.mlp.p50,
-            mlp_p95=pred.mlp.p95,
-        )
+        show_prediction_summary(pred)
+            
 elif mode == "Custom System":
     st.header("Custom System")
     st.write("Enter simplified predictor inputs directly.")
@@ -140,14 +127,8 @@ elif mode == "Custom System":
 
     if st.button("Predict", key="custom_predict"):
         pred = predict_placeholder()
-        show_prediction_summary(
-            qrf_p5=pred.qrf.p5,
-            qrf_p50=pred.qrf.p50,
-            qrf_p95=pred.qrf.p95,
-            mlp_p5=pred.mlp.p5,
-            mlp_p50=pred.mlp.p50,
-            mlp_p95=pred.mlp.p95,
-        )
+        show_prediction_summary(pred)
+            
        
 else:
     st.header("Example Systems")
@@ -161,11 +142,5 @@ else:
     if st.button("Load Example", key="load_example"):
         st.success(f"Loaded example: {example}")
         pred = predict_placeholder()
-        show_prediction_summary(
-            qrf_p5=pred.qrf.p5,
-            qrf_p50=pred.qrf.p50,
-            qrf_p95=pred.qrf.p95,
-            mlp_p5=pred.mlp.p5,
-            mlp_p50=pred.mlp.p50,
-            mlp_p95=pred.mlp.p95,
-        )
+        show_prediction_summary(pred)
+            

@@ -1,7 +1,7 @@
 import streamlit as st
 from predictor.interpretation import classify_model_agreement
 from predictor.downloads import prediction_summary_csv
-from predictor.predict import PredictionResult, predict_placeholder
+from predictor.predict import PredictionResult, predict
 from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 
 MANUSCRIPT_TITLE = (
@@ -107,7 +107,7 @@ if mode == "Known System":
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
 
     if st.button("Predict", key="known_predict"):
-        pred = predict_placeholder()
+        pred = predict({})
         show_prediction_summary(pred)
             
 elif mode == "Custom System":
@@ -128,7 +128,7 @@ elif mode == "Custom System":
         cas = st.text_input("CAS optional", value="")
 
     if st.button("Predict", key="custom_predict"):
-        pred = predict_placeholder()
+        pred = predict({})
         show_prediction_summary(pred)
             
        
@@ -143,6 +143,6 @@ else:
 
     if st.button("Load Example", key="load_example"):
         st.success(f"Loaded example: {example}")
-        pred = predict_placeholder()
+        pred = predict({})
         show_prediction_summary(pred)
             

@@ -1,4 +1,5 @@
 import streamlit as st
+from predictor.interpretation import classify_model_agreement
 
 MANUSCRIPT_TITLE = (
     "Predicting Solute Diffusivity in Swollen Polymer Systems "
@@ -15,24 +16,6 @@ DISCLAIMER = (
 
 def show_disclaimer() -> None:
     st.info(DISCLAIMER)
-
-
-def classify_model_agreement(delta_log10: float) -> tuple[str, str]:
-    if delta_log10 < 0.25:
-        return (
-            "Excellent agreement",
-            "The QRF and MLP prediction distributions are closely aligned.",
-        )
-    if delta_log10 < 0.75:
-        return (
-            "Moderate agreement",
-            "The QRF and MLP predictions differ moderately. Interpret the prediction with some caution.",
-        )
-    return (
-        "Large disagreement",
-        "The QRF and MLP predictions differ substantially. Interpret the prediction cautiously and consider experimental confirmation.",
-    )
-
 
 def show_prediction_summary(
     qrf_p5: float,

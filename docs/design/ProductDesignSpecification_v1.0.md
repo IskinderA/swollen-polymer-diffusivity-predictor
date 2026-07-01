@@ -37,6 +37,8 @@ The predictor allows users to apply the final published models using experimenta
 
 The predictor should feel more like a scientific instrument than a software application.
 
+The companion predictor is intended to complement the accompanying manuscript, Supporting Information, and GitHub repository. Together, these resources provide a unified framework for understanding, reproducing, and applying the published machine-learning models.
+
 ---
 
 # 3. Intended Users

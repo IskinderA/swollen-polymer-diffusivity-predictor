@@ -1,5 +1,6 @@
 import streamlit as st
 from predictor.interpretation import classify_model_agreement
+from predictor.downloads import prediction_summary_csv
 
 MANUSCRIPT_TITLE = (
     "Predicting Solute Diffusivity in Swollen Polymer Systems "
@@ -61,10 +62,13 @@ def show_prediction_summary(
     st.subheader("Downloads")
     st.download_button(
         "Download placeholder CSV",
-        data=(
-            "model,p5,p50,p95\n"
-            f"QRF,{qrf_p5:.3f},{qrf_p50:.3f},{qrf_p95:.3f}\n"
-            f"MLP,{mlp_p5:.3f},{mlp_p50:.3f},{mlp_p95:.3f}\n"
+        data=prediction_summary_csv(
+            qrf_p5=qrf_p5,
+            qrf_p50=qrf_p50,
+            qrf_p95=qrf_p95,
+            mlp_p5=mlp_p5,
+            mlp_p50=mlp_p50,
+            mlp_p95=mlp_p95,
         ),
         file_name="prediction_summary_placeholder.csv",
         mime="text/csv",

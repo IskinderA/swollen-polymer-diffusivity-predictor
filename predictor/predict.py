@@ -21,8 +21,13 @@ class PredictionResult:
     mlp: PredictionDistribution
 
 
-def predict_placeholder() -> PredictionResult:
-    """Return placeholder prediction distributions for interface testing."""
+def predict(inputs: dict) -> PredictionResult:
+    """
+    Generate predictions from the simplified predictor interface.
+
+    Currently returns placeholder predictions while the
+    published prediction engine is being integrated.
+    """
 
     return PredictionResult(
         qrf=PredictionDistribution(

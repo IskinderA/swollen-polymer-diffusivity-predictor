@@ -2,6 +2,7 @@ import streamlit as st
 from predictor.interpretation import classify_model_agreement
 from predictor.downloads import prediction_summary_csv
 from predictor.predict import PredictionResult, predict_placeholder
+from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 
 MANUSCRIPT_TITLE = (
     "Predicting Solute Diffusivity in Swollen Polymer Systems "
@@ -77,7 +78,8 @@ st.set_page_config(
 st.title("Swollen Polymer Diffusivity Predictor")
 st.caption(f"A provisional companion predictor accompanying: *{MANUSCRIPT_TITLE}*")
 
-show_disclaimer()
+def show_disclaimer() -> None:
+    st.info(RESEARCH_USE_DISCLAIMER)
 
 st.divider()
 

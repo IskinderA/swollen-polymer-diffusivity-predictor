@@ -1,6 +1,7 @@
 import streamlit as st
 from predictor.interpretation import classify_model_agreement
 from predictor.downloads import prediction_summary_csv
+from predictor.predict import predict_placeholder
 
 MANUSCRIPT_TITLE = (
     "Predicting Solute Diffusivity in Swollen Polymer Systems "
@@ -111,13 +112,14 @@ if mode == "Known System":
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
 
     if st.button("Predict", key="known_predict"):
+        pred = predict_placeholder()
         show_prediction_summary(
-            qrf_p5=-8.20,
-            qrf_p50=-7.10,
-            qrf_p95=-5.90,
-            mlp_p5=-7.00,
-            mlp_p50=-6.55,
-            mlp_p95=-6.10,
+            qrf_p5=pred["qrf"]["p5"],
+            qrf_p50=pred["qrf"]["p50"],
+            qrf_p95=pred["qrf"]["p95"],
+            mlp_p5=pred["mlp"]["p5"],
+            mlp_p50=pred["mlp"]["p50"],
+            mlp_p95=pred["mlp"]["p95"],
         )
 
 elif mode == "Custom System":
@@ -138,13 +140,14 @@ elif mode == "Custom System":
         cas = st.text_input("CAS optional", value="")
 
     if st.button("Predict", key="custom_predict"):
+        pred = predict_placeholder()
         show_prediction_summary(
-            qrf_p5=-8.20,
-            qrf_p50=-7.10,
-            qrf_p95=-5.90,
-            mlp_p5=-7.00,
-            mlp_p50=-6.55,
-            mlp_p95=-6.10,
+            qrf_p5=pred["qrf"]["p5"],
+            qrf_p50=pred["qrf"]["p50"],
+            qrf_p95=pred["qrf"]["p95"],
+            mlp_p5=pred["mlp"]["p5"],
+            mlp_p50=pred["mlp"]["p50"],
+            mlp_p95=pred["mlp"]["p95"],
         )
 
 else:
@@ -158,11 +161,13 @@ else:
 
     if st.button("Load Example", key="load_example"):
         st.success(f"Loaded example: {example}")
+
+        pred = predict_placeholder()
         show_prediction_summary(
-            qrf_p5=-8.20,
-            qrf_p50=-7.10,
-            qrf_p95=-5.90,
-            mlp_p5=-7.00,
-            mlp_p50=-6.55,
-            mlp_p95=-6.10,
+            qrf_p5=pred["qrf"]["p5"],
+            qrf_p50=pred["qrf"]["p50"],
+            qrf_p95=pred["qrf"]["p95"],
+            mlp_p5=pred["mlp"]["p5"],
+            mlp_p50=pred["mlp"]["p50"],
+            mlp_p95=pred["mlp"]["p95"],
         )

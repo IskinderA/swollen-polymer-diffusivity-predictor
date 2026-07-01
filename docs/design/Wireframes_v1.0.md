@@ -6,7 +6,7 @@
 
 This document illustrates the intended user workflow and interface layout for the provisional companion predictor accompanying
 
-> **Physics-Informed Machine Learning for Predicting Solute Diffusivity in Swollen Polymer Systems**
+> **Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks**
 
 The wireframes describe user interactions and scientific workflows rather than graphical appearance. The objective is to design a simple, transparent, and trustworthy scientific instrument rather than a conventional software application.
 
@@ -50,8 +50,7 @@ Swollen Polymer Diffusivity Predictor
 
 A provisional companion predictor accompanying
 
-Physics-Informed Machine Learning for Predicting
-Solute Diffusivity in Swollen Polymer Systems
+Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks
 
 --------------------------------------------------------
 

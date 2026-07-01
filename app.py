@@ -114,14 +114,13 @@ if mode == "Known System":
     if st.button("Predict", key="known_predict"):
         pred = predict_placeholder()
         show_prediction_summary(
-            qrf_p5=pred["qrf"]["p5"],
-            qrf_p50=pred["qrf"]["p50"],
-            qrf_p95=pred["qrf"]["p95"],
-            mlp_p5=pred["mlp"]["p5"],
-            mlp_p50=pred["mlp"]["p50"],
-            mlp_p95=pred["mlp"]["p95"],
+            qrf_p5=pred.qrf.p5,
+            qrf_p50=pred.qrf.p50,
+            qrf_p95=pred.qrf.p95,
+            mlp_p5=pred.mlp.p5,
+            mlp_p50=pred.mlp.p50,
+            mlp_p95=pred.mlp.p95,
         )
-
 elif mode == "Custom System":
     st.header("Custom System")
     st.write("Enter simplified predictor inputs directly.")
@@ -142,14 +141,14 @@ elif mode == "Custom System":
     if st.button("Predict", key="custom_predict"):
         pred = predict_placeholder()
         show_prediction_summary(
-            qrf_p5=pred["qrf"]["p5"],
-            qrf_p50=pred["qrf"]["p50"],
-            qrf_p95=pred["qrf"]["p95"],
-            mlp_p5=pred["mlp"]["p5"],
-            mlp_p50=pred["mlp"]["p50"],
-            mlp_p95=pred["mlp"]["p95"],
+            qrf_p5=pred.qrf.p5,
+            qrf_p50=pred.qrf.p50,
+            qrf_p95=pred.qrf.p95,
+            mlp_p5=pred.mlp.p5,
+            mlp_p50=pred.mlp.p50,
+            mlp_p95=pred.mlp.p95,
         )
-
+       
 else:
     st.header("Example Systems")
     st.write("Explore representative examples from the manuscript.")
@@ -161,13 +160,12 @@ else:
 
     if st.button("Load Example", key="load_example"):
         st.success(f"Loaded example: {example}")
-
         pred = predict_placeholder()
         show_prediction_summary(
-            qrf_p5=pred["qrf"]["p5"],
-            qrf_p50=pred["qrf"]["p50"],
-            qrf_p95=pred["qrf"]["p95"],
-            mlp_p5=pred["mlp"]["p5"],
-            mlp_p50=pred["mlp"]["p50"],
-            mlp_p95=pred["mlp"]["p95"],
+            qrf_p5=pred.qrf.p5,
+            qrf_p50=pred.qrf.p50,
+            qrf_p95=pred.qrf.p95,
+            mlp_p5=pred.mlp.p5,
+            mlp_p50=pred.mlp.p50,
+            mlp_p95=pred.mlp.p95,
         )

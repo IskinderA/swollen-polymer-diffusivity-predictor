@@ -202,10 +202,12 @@ else:
     )
 
     if st.button("Load Example", key="load_example"):
-        st.success(f"Loaded example: {example}")
+    st.success(f"Loaded example: {example}")
+
+    if example == "Moderate rubbery":
         inputs = SimplePredictorInputs(
             temperature_k=298.15,
-            tg_k=300.0,
+            tg_k=250.0,
             mass_ratio=1.10,
             rho_polymer=1.05,
             rho_solvent=0.79,
@@ -213,8 +215,38 @@ else:
             chris_category="R",
             smiles="CCO",
             cas="",
-            n_samples=n_samples,
+            n_samples=1000,
         )
-        pred = predict(inputs)
+
+    elif example == "Moderate glassy":
+        inputs = SimplePredictorInputs(
+            temperature_k=298.15,
+            tg_k=350.0,
+            mass_ratio=1.03,
+            rho_polymer=1.20,
+            rho_solvent=0.79,
+            polymer_xc=0.0,
+            chris_category="G",
+            smiles="CCO",
+            cas="",
+            n_samples=1000,
+        )
+
+    else:  # PEBAX-like benchmark
+        inputs = SimplePredictorInputs(
+            temperature_k=298.15,
+            tg_k=215.0,
+            mass_ratio=1.20,
+            rho_polymer=1.01,
+            rho_solvent=0.79,
+            polymer_xc=0.0,
+            chris_category="R",
+            smiles="CC1=CC=C(N=Nc2ccc(N(CC)CC)cc2)C=C1",
+            cas="",
+            n_samples=1000,
+        )
+
+    pred = predict(inputs)
+    show_prediction_summary(pred)
         show_prediction_summary(pred)
             

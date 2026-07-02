@@ -140,23 +140,21 @@ elif mode == "Custom System":
         smiles = st.text_input("SMILES preferred", value="CCO")
         cas = st.text_input("CAS optional", value="")
 
-    if st.button("Predict", key="custom_predict"):
-        inputs = SimplePredictorInputs(
-            temperature_k=298.15,
-            tg_k=300.0,
-            mass_ratio=1.10,
-            rho_polymer=1.05,
-            rho_solvent=0.79,
-            polymer_xc=0.0,
-            chris_category="R",
-            smiles="CCO",
-            cas="",
-            n_samples=1000,
-        )
-        pred = predict(inputs)
-        
-        show_prediction_summary(pred)
-            
+if st.button("Predict", key="custom_predict"):
+    inputs = SimplePredictorInputs(
+        temperature_k=temperature,
+        tg_k=tg_k,
+        mass_ratio=mass_ratio,
+        rho_polymer=rho_polymer,
+        rho_solvent=rho_solvent,
+        polymer_xc=polymer_xc,
+        chris_category=chris_category,
+        smiles=smiles,
+        cas=cas,
+        n_samples=1000,
+    )
+    pred = predict(inputs)
+    show_prediction_summary(pred)
        
 else:
     st.header("Example Systems")

@@ -1,6 +1,6 @@
 import streamlit as st
 from predictor.interpretation import classify_model_agreement
-from predictor.downloads import prediction_summary_csv
+from predictor.downloads import prediction_summary_csv, prediction_summary_json
 from predictor.predict import PredictionResult, predict
 from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 from predictor.predict import PredictionResult, SimplePredictorInputs, predict
@@ -81,6 +81,15 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
         ),
         file_name="prediction_summary_placeholder.csv",
         mime="text/csv",
+    )
+    st.download_button(
+        "Download JSON",
+        data=prediction_summary_json(
+            pred=pred,
+            inputs=inputs,
+        ),
+        file_name="prediction_summary.json",
+        mime="application/json",
     )
 
 
@@ -214,7 +223,7 @@ else:
         ["Moderate rubbery", "Moderate glassy", "PEBAX-like benchmark"],
     )
 
-    if st.button("Load Example", key="load_example"):
+    if st.("Load Example", key="load_example"):
     st.success(f"Loaded example: {example}")
 
     if example == "Moderate rubbery":

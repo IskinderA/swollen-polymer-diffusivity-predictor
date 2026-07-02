@@ -74,14 +74,10 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
 
     st.subheader("Downloads")
     st.download_button(
-        "Download placeholder CSV",
+        "Download CSV",
         data=prediction_summary_csv(
-            qrf_p5=pred.qrf.p5,
-            qrf_p50=pred.qrf.p50,
-            qrf_p95=pred.qrf.p95,
-            mlp_p5=pred.mlp.p5,
-            mlp_p50=pred.mlp.p50,
-            mlp_p95=pred.mlp.p95,
+            pred=pred,
+            inputs=inputs,
         ),
         file_name="prediction_summary_placeholder.csv",
         mime="text/csv",

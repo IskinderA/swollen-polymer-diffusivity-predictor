@@ -107,21 +107,39 @@ if mode == "Known System":
     temperature = st.number_input("Temperature, T (K)", value=298.15)
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
 
-    if st.button("Predict", key="known_predict"):
-        inputs = SimplePredictorInputs(
-            temperature_k=temperature,
-            tg_k=300.0,          # placeholder until known-system lookup is connected
-            mass_ratio=mass_ratio,
-            rho_polymer=1.05,    # placeholder
-            rho_solvent=0.79,    # placeholder
-            polymer_xc=0.0,      # placeholder
-            chris_category="R",  # placeholder
-            smiles="CCO",        # placeholder
-            cas="",
-            n_samples=1000,
-        )
-    pred = predict(inputs)
-    show_prediction_summary(pred)
+st.subheader("Prediction Sampling")
+
+n_samples = st.number_input(
+    "Number of samples to generate",
+    min_value=100,
+    max_value=10000,
+    value=1000,
+    step=100,
+)
+
+st.caption(
+    "Sampling will be used to generate empirical prediction distributions. "
+    "For QRF, samples are drawn with replacement from tree-level predictions "
+    "across the 300 trees in the trained random forest. For the MLP, samples "
+    "are drawn with replacement from predictions across the 20 independently "
+    "trained neural networks."
+)
+    
+if st.button("Predict", key="known_predict"):
+    inputs = SimplePredictorInputs(
+        temperature_k=temperature,
+        tg_k=300.0,          # placeholder until known-system lookup is connected
+        mass_ratio=mass_ratio,
+        rho_polymer=1.05,    # placeholder
+        rho_solvent=0.79,    # placeholder
+        polymer_xc=0.0,      # placeholder
+        chris_category="R",  # placeholder
+        smiles="CCO",        # placeholder
+        cas="",
+        n_samples=1000,
+    )
+pred = predict(inputs)
+show_prediction_summary(pred)
             
 elif mode == "Custom System":
     st.header("Custom System")
@@ -140,6 +158,24 @@ elif mode == "Custom System":
         smiles = st.text_input("SMILES preferred", value="CCO")
         cas = st.text_input("CAS optional", value="")
 
+st.subheader("Prediction Sampling")
+
+n_samples = st.number_input(
+    "Number of samples to generate",
+    min_value=100,
+    max_value=10000,
+    value=1000,
+    step=100,
+)
+
+st.caption(
+    "Sampling will be used to generate empirical prediction distributions. "
+    "For QRF, samples are drawn with replacement from tree-level predictions "
+    "across the 300 trees in the trained random forest. For the MLP, samples "
+    "are drawn with replacement from predictions across the 20 independently "
+    "trained neural networks."
+)
+
 if st.button("Predict", key="custom_predict"):
     inputs = SimplePredictorInputs(
         temperature_k=temperature,
@@ -151,7 +187,7 @@ if st.button("Predict", key="custom_predict"):
         chris_category=chris_category,
         smiles=smiles,
         cas=cas,
-        n_samples=1000,
+        n_samples=n_samples,
     )
     pred = predict(inputs)
     show_prediction_summary(pred)
@@ -177,7 +213,7 @@ else:
             chris_category="R",
             smiles="CCO",
             cas="",
-            n_samples=1000,
+            n_samples=n_samples,
         )
         pred = predict(inputs)
         show_prediction_summary(pred)

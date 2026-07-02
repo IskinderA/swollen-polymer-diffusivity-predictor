@@ -133,40 +133,40 @@ if mode == "Known System":
     temperature = st.number_input("Temperature, T (K)", value=298.15)
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
 
-st.subheader("Prediction Sampling")
-
-n_samples = st.number_input(
-    "Number of samples to generate",
-    min_value=100,
-    max_value=10000,
-    value=1000,
-    step=100,
-)
-
-st.caption(
-    "Sampling will be used to generate empirical prediction distributions. "
-    "For QRF, samples are drawn with replacement from tree-level predictions "
-    "across the 300 trees in the trained random forest. For the MLP, samples "
-    "are drawn with replacement from predictions across the 20 independently "
-    "trained neural networks."
-)
-    
-if st.button("Predict", key="known_predict"):
-    inputs = SimplePredictorInputs(
-        temperature_k=temperature,
-        tg_k=300.0,          # placeholder until known-system lookup is connected
-        mass_ratio=mass_ratio,
-        rho_polymer=1.05,    # placeholder
-        rho_solvent=0.79,    # placeholder
-        polymer_xc=0.0,      # placeholder
-        chris_category="R",  # placeholder
-        smiles="CCO",        # placeholder
-        cas="",
-        n_samples=1000,
+    st.subheader("Prediction Sampling")
+    n_samples = st.number_input(
+        "Number of samples to generate",
+        min_value=100,
+        max_value=10000,
+        value=1000,
+        step=100,
+        key="known_n_samples",
     )
-pred = predict(inputs)
-show_prediction_summary(pred, inputs)
-            
+
+    st.caption(
+        "Sampling will be used to generate empirical prediction distributions. "
+        "For QRF, samples are drawn with replacement from tree-level predictions "
+        "across the 300 trees in the trained random forest. For the MLP, samples "
+        "are drawn with replacement from predictions across the 20 independently "
+        "trained neural networks."
+    )
+
+    if st.button("Predict", key="known_predict"):
+        inputs = SimplePredictorInputs(
+            temperature_k=temperature,
+            tg_k=300.0,
+            mass_ratio=mass_ratio,
+            rho_polymer=1.05,
+            rho_solvent=0.79,
+            polymer_xc=0.0,
+            chris_category="R",
+            smiles="CCO",
+            cas="",
+            n_samples=n_samples,
+        )
+        pred = predict(inputs)
+        show_prediction_summary(pred, inputs)
+
 elif mode == "Custom System":
     st.header("Custom System")
     st.write("Enter simplified predictor inputs directly.")
@@ -184,40 +184,40 @@ elif mode == "Custom System":
         smiles = st.text_input("SMILES preferred", value="CCO")
         cas = st.text_input("CAS optional", value="")
 
-st.subheader("Prediction Sampling")
-
-n_samples = st.number_input(
-    "Number of samples to generate",
-    min_value=100,
-    max_value=10000,
-    value=1000,
-    step=100,
-)
-
-st.caption(
-    "Sampling will be used to generate empirical prediction distributions. "
-    "For QRF, samples are drawn with replacement from tree-level predictions "
-    "across the 300 trees in the trained random forest. For the MLP, samples "
-    "are drawn with replacement from predictions across the 20 independently "
-    "trained neural networks."
-)
-
-if st.button("Predict", key="custom_predict"):
-    inputs = SimplePredictorInputs(
-        temperature_k=temperature,
-        tg_k=tg_k,
-        mass_ratio=mass_ratio,
-        rho_polymer=rho_polymer,
-        rho_solvent=rho_solvent,
-        polymer_xc=polymer_xc,
-        chris_category=chris_category,
-        smiles=smiles,
-        cas=cas,
-        n_samples=n_samples,
+    st.subheader("Prediction Sampling")
+    n_samples = st.number_input(
+        "Number of samples to generate",
+        min_value=100,
+        max_value=10000,
+        value=1000,
+        step=100,
+        key="custom_n_samples",
     )
-    pred = predict(inputs)
-    show_prediction_summary(pred, inputs)
-       
+
+    st.caption(
+        "Sampling will be used to generate empirical prediction distributions. "
+        "For QRF, samples are drawn with replacement from tree-level predictions "
+        "across the 300 trees in the trained random forest. For the MLP, samples "
+        "are drawn with replacement from predictions across the 20 independently "
+        "trained neural networks."
+    )
+
+    if st.button("Predict", key="custom_predict"):
+        inputs = SimplePredictorInputs(
+            temperature_k=temperature,
+            tg_k=tg_k,
+            mass_ratio=mass_ratio,
+            rho_polymer=rho_polymer,
+            rho_solvent=rho_solvent,
+            polymer_xc=polymer_xc,
+            chris_category=chris_category,
+            smiles=smiles,
+            cas=cas,
+            n_samples=n_samples,
+        )
+        pred = predict(inputs)
+        show_prediction_summary(pred, inputs)
+
 else:
     st.header("Example Systems")
     st.write("Explore representative examples from the manuscript.")
@@ -227,10 +227,9 @@ else:
         ["Moderate rubbery", "Moderate glassy", "PEBAX-like benchmark"],
     )
 
-    if st.("Load Example", key="load_example"):
-    st.success(f"Loaded example: {example}")
+    if st.button("Load Example", key="load_example"):
+        st.success(f"Loaded example: {example}")
 
-    if example == "Moderate rubbery":
         inputs = SimplePredictorInputs(
             temperature_k=298.15,
             tg_k=250.0,
@@ -244,35 +243,6 @@ else:
             n_samples=1000,
         )
 
-    elif example == "Moderate glassy":
-        inputs = SimplePredictorInputs(
-            temperature_k=298.15,
-            tg_k=350.0,
-            mass_ratio=1.03,
-            rho_polymer=1.20,
-            rho_solvent=0.79,
-            polymer_xc=0.0,
-            chris_category="G",
-            smiles="CCO",
-            cas="",
-            n_samples=1000,
-        )
+        pred = predict(inputs)
+        show_prediction_summary(pred, inputs)
 
-    else:  # PEBAX-like benchmark
-        inputs = SimplePredictorInputs(
-            temperature_k=298.15,
-            tg_k=215.0,
-            mass_ratio=1.20,
-            rho_polymer=1.01,
-            rho_solvent=0.79,
-            polymer_xc=0.0,
-            chris_category="R",
-            smiles="CC1=CC=C(N=Nc2ccc(N(CC)CC)cc2)C=C1",
-            cas="",
-            n_samples=1000,
-        )
-
-    pred = predict(inputs)
-    show_prediction_summary(pred, inputs)
-        show_prediction_summary(pred)
-            

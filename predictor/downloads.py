@@ -1,10 +1,11 @@
-import json
-
 """
 Download utilities for the Swollen Polymer Diffusivity Predictor.
 """
 
+import json
+
 from predictor.predict import PredictionResult, SimplePredictorInputs
+
 
 def prediction_summary_csv(
     pred: PredictionResult,
@@ -27,6 +28,12 @@ def prediction_summary_csv(
         f"prediction,qrf_p5_log10D,{pred.qrf.p5:.6f}",
         f"prediction,qrf_p50_log10D,{pred.qrf.p50:.6f}",
         f"prediction,qrf_p95_log10D,{pred.qrf.p95:.6f}",
+        f"prediction,mlp_p5_log10D,{pred.mlp.p5:.6f}",
+        f"prediction,mlp_p50_log10D,{pred.mlp.p50:.6f}",
+        f"prediction,mlp_p95_log10D,{pred.mlp.p95:.6f}",
+    ]
+
+    return "\n".join(rows) + "\n"
 
 
 def prediction_summary_json(
@@ -63,10 +70,3 @@ def prediction_summary_json(
     }
 
     return json.dumps(payload, indent=2)
-
-        f"prediction,mlp_p5_log10D,{pred.mlp.p5:.6f}",
-        f"prediction,mlp_p50_log10D,{pred.mlp.p50:.6f}",
-        f"prediction,mlp_p95_log10D,{pred.mlp.p95:.6f}",
-    ]
-
-    return "\n".join(rows) + "\n"

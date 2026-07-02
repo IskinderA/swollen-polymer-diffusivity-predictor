@@ -109,19 +109,19 @@ if mode == "Known System":
 
     if st.button("Predict", key="known_predict"):
         inputs = SimplePredictorInputs(
-            temperature_k=298.15,
-            tg_k=300.0,
-            mass_ratio=1.10,
-            rho_polymer=1.05,
-            rho_solvent=0.79,
-            polymer_xc=0.0,
-            chris_category="R",
-            smiles="CCO",
+            temperature_k=temperature,
+            tg_k=300.0,          # placeholder until known-system lookup is connected
+            mass_ratio=mass_ratio,
+            rho_polymer=1.05,    # placeholder
+            rho_solvent=0.79,    # placeholder
+            polymer_xc=0.0,      # placeholder
+            chris_category="R",  # placeholder
+            smiles="CCO",        # placeholder
             cas="",
             n_samples=1000,
         )
-        pred = predict(inputs)
-        show_prediction_summary(pred)
+    pred = predict(inputs)
+    show_prediction_summary(pred)
             
 elif mode == "Custom System":
     st.header("Custom System")

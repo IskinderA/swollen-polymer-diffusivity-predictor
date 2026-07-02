@@ -20,8 +20,21 @@ class PredictionResult:
     qrf: PredictionDistribution
     mlp: PredictionDistribution
 
+@dataclass
+class SimplePredictorInputs:
+    temperature_k: float
+    tg_k: float
+    mass_ratio: float
+    rho_polymer: float
+    rho_solvent: float
+    polymer_xc: float
+    chris_category: str
+    smiles: str = ""
+    cas: str = ""
+    n_samples: int = 1000
 
-def predict(inputs: dict) -> PredictionResult:
+
+def predict(inputs: SimplePredictorInputs) -> PredictionResult:
     """
     Generate predictions from the simplified predictor interface.
 

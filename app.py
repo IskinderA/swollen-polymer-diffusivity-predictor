@@ -1,9 +1,9 @@
 import streamlit as st
 from predictor.interpretation import classify_model_agreement
 from predictor.downloads import prediction_summary_csv, prediction_summary_json
-from predictor.predict import PredictionResult, predict
 from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 from predictor.predict import PredictionResult, SimplePredictorInputs, predict
+from predictor.descriptors import compute_descriptor_placeholders
 
 MANUSCRIPT_TITLE = (
     "Predicting Solute Diffusivity in Swollen Polymer Systems "
@@ -42,6 +42,10 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
         st.write(f"**CAS:** {inputs.cas if inputs.cas else 'Not provided'}")
         st.write(f"**Samples:** {inputs.n_samples}")
 
+    with st.expander("Show computed descriptors"):
+        descriptors = compute_descriptor_placeholders(inputs)
+        st.json(descriptors)
+    
     col1, col2 = st.columns(2)
 
     with col1:

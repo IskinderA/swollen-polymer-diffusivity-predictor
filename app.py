@@ -21,9 +21,26 @@ DISCLAIMER = (
 def show_disclaimer() -> None:
     st.info(DISCLAIMER)
 
-def show_prediction_summary(pred: PredictionResult) -> None:
+def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInputs) -> None:
     st.divider()
     st.header("Prediction Summary")
+    st.subheader("Inputs Used")
+
+    input_col1, input_col2 = st.columns(2)
+
+    with input_col1:
+        st.write(f"**Temperature:** {inputs.temperature_k:.2f} K")
+        st.write(f"**Tg:** {inputs.tg_k:.2f} K")
+        st.write(f"**Swollen/dry mass ratio:** {inputs.mass_ratio:.3f}")
+        st.write(f"**Polymer density:** {inputs.rho_polymer:.3f}")
+
+    with input_col2:
+        st.write(f"**Solvent density:** {inputs.rho_solvent:.3f}")
+        st.write(f"**Crystallinity, Xc:** {inputs.polymer_xc:.3f}")
+        st.write(f"**CHRIS category:** {inputs.chris_category}")
+        st.write(f"**SMILES:** {inputs.smiles if inputs.smiles else 'Not provided'}")
+        st.write(f"**CAS:** {inputs.cas if inputs.cas else 'Not provided'}")
+        st.write(f"**Samples:** {inputs.n_samples}")
 
     col1, col2 = st.columns(2)
 
@@ -139,7 +156,7 @@ if st.button("Predict", key="known_predict"):
         n_samples=1000,
     )
 pred = predict(inputs)
-show_prediction_summary(pred)
+show_prediction_summary(pred, inputs)
             
 elif mode == "Custom System":
     st.header("Custom System")
@@ -190,7 +207,7 @@ if st.button("Predict", key="custom_predict"):
         n_samples=n_samples,
     )
     pred = predict(inputs)
-    show_prediction_summary(pred)
+    show_prediction_summary(pred, inputs)
        
 else:
     st.header("Example Systems")
@@ -247,6 +264,6 @@ else:
         )
 
     pred = predict(inputs)
-    show_prediction_summary(pred)
+    show_prediction_summary(pred, inputs)
         show_prediction_summary(pred)
             

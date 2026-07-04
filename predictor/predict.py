@@ -35,22 +35,40 @@ class SimplePredictorInputs:
 
 
 def predict(inputs: SimplePredictorInputs) -> PredictionResult:
-    """
-    Generate predictions from the simplified predictor interface.
+    """Generate predictions using the reference prediction engine."""
 
-    Currently returns placeholder predictions while the
-    published prediction engine is being integrated.
-    """
+    from predictor.reference import wrapper
+
+    common_kwargs = dict(
+        T=inputs.temperature_k,
+        Tg_K=inputs.tg_k,
+        mass_ratio=inputs.mass_ratio,
+        rho_polymer=inputs.rho_polymer,
+        rho_solvent=inputs.rho_solvent,
+        Polymer_Xc=inputs.polymer_xc,
+        CHRIS_Category=inputs.chris_category,
+        smiles=inputs.smiles or None,
+        cas=inputs.cas or None,
+    )
+
+    qrf_result = wrapper.predict_from_simple_interface(
+        model="qrf",
+        **common_kwargs,
+    )
+
+    mlp_result = wrapper.predict_from_simple_interface_mlp_ensemble(
+        **common_kwargs,
+    )
 
     return PredictionResult(
         qrf=PredictionDistribution(
-            p5=-8.20,
-            p50=-7.10,
-            p95=-5.90,
+            p5=qrf_result["log10D_p5"],
+            p50=qrf_result["log10D_p50"],
+            p95=qrf_result["log10D_p95"],
         ),
         mlp=PredictionDistribution(
-            p5=-7.00,
-            p50=-6.55,
-            p95=-6.10,
+            p5=mlp_result["log10D_p5"],
+            p50=mlp_result["log10D_p50"],
+            p95=mlp_result["log10D_p95"],
         ),
     )

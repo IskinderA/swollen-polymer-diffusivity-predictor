@@ -1,0 +1,37 @@
+{
+  "target": "log10D",
+  "n_rows": 2032,
+  "n_polymers": 27,
+  "n_solvents": 50,
+  "n_solutes": 47,
+  "numeric_features": [
+    "T_over_Tg",
+    "Tg_K",
+    "solute_MW",
+    "volume_fraction",
+    "mass_fraction",
+    "Qv-1",
+    "Qw-1",
+    "Polymer_Xc",
+    "solute_ring_count",
+    "solute_aromatic_ring_count",
+    "solute_rotatable_bond_count",
+    "rotbond_over_Tg",
+    "ring_over_Tg",
+    "aromatic_over_Tg",
+    "rotbond_times_phi",
+    "ring_times_phi"
+  ],
+  "categorical_features": [
+    "CHRIS Category"
+  ],
+  "qrf_model_file": "saved_models\\qrf_pipeline.joblib",
+  "mlp_model_file": "saved_models\\mlp_128_64_pipeline.joblib",
+  "qrf_n_estimators": 300,
+  "mlp_hidden_layer_sizes": [
+    128,
+    64
+  ],
+  "mlp_alpha": 0.0001,
+  "mlp_learning_rate_init": 0.001
+}

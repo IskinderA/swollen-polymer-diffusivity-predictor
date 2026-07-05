@@ -22,9 +22,9 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
     with input_col2:
         st.write(f"**Solvent density:** {inputs.rho_solvent:.3f} g/cc")
         st.write(f"**Crystallinity, Xc:** {inputs.polymer_xc:.3f}")
-        st.write(f"**CHRIS category:** {inputs.chris_category}")
-        st.write(f"**SMILES:** {inputs.smiles if inputs.smiles else 'Not provided'}")
-        st.write(f"**CAS:** {inputs.cas if inputs.cas else 'Not provided'}")
+        st.write(f"**Polymer CHRIS category:** {inputs.chris_category}")
+        st.write(f"**Solute/Penetrant SMILES:** {inputs.smiles if inputs.smiles else 'Not provided'}")
+        st.write(f"**Solute/Penetrant CAS:** {inputs.cas if inputs.cas else 'Not provided'}")
         st.write(f"**Samples:** {inputs.n_samples}")
 
     with st.expander("Show computed descriptors"):
@@ -152,7 +152,7 @@ if mode == "Known System":
             rho_polymer=1.05,
             rho_solvent=0.79,
             polymer_xc=0.0,
-            chris_category="R",
+            chris_category="R1",
             smiles="CCO",
             cas="",
             n_samples=n_samples,
@@ -173,9 +173,18 @@ elif mode == "Custom System":
     with col2:
         rho_solvent = st.number_input("Solvent density, g/cc", value=0.79)
         polymer_xc = st.number_input("Polymer crystallinity, Xc", value=0.0)
-        chris_category = st.selectbox("CHRIS category", ["R", "G"], index=0)
-        smiles = st.text_input("SMILES preferred", value="CCO")
-        cas = st.text_input("CAS optional", value="")
+        chris_category = st.selectbox("Polymer CHRIS category",
+            ["R1", "R2", "P1", "P2", "P3", "P4", "G1", "G2"],
+            index=0,
+            help=(
+                "CHRIS refers to the CHemical RISk calculators polymer transport "
+                "classification (as reported in Elder et al. 2023, DOI: 10.1002/pol.20230219) used as an input in the trained models in the current work. The refined "
+                "categories R1, R2, P1–P4, and G1–G2 distinguish polymer transport "
+                "behavior across rubbers, plastics, and glasses."
+            ),
+        )
+        smiles = st.text_input("Solute/Penetrant SMILES preferred", value="CCO")
+        cas = st.text_input("Solute/Penetrant CAS optional", value="")
 
     st.subheader("Prediction Sampling")
     n_samples = st.number_input(
@@ -230,7 +239,7 @@ else:
             rho_polymer=1.05,
             rho_solvent=0.79,
             polymer_xc=0.0,
-            chris_category="R",
+            chris_category="R1",
             smiles="CCO",
             cas="",
             n_samples=1000,

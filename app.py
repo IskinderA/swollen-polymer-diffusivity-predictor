@@ -5,21 +5,6 @@ from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 from predictor.predict import PredictionResult, SimplePredictorInputs, predict
 from predictor.descriptors import compute_descriptor_placeholders
 
-MANUSCRIPT_TITLE = (
-    "Predicting Solute Diffusivity in Swollen Polymer Systems "
-    "Using Quantile Random Forests and Neural Networks"
-)
-
-DISCLAIMER = (
-    "This provisional companion predictor is provided for reproducibility, "
-    "exploratory analysis, and educational use. It is not an FDA-qualified "
-    "Regulatory Science Tool (RST), Medical Device Development Tool (MDDT), "
-    "or FDA-approved decision-support tool."
-)
-
-
-def show_disclaimer() -> None:
-    st.info(DISCLAIMER)
 
 def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInputs) -> None:
     st.divider()
@@ -29,13 +14,13 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
     input_col1, input_col2 = st.columns(2)
 
     with input_col1:
-        st.write(f"**Temperature:** {inputs.temperature_k:.2f} K")
         st.write(f"**Tg:** {inputs.tg_k:.2f} K")
+        st.write(f"**Temperature:** {inputs.temperature_k:.2f} K")
         st.write(f"**Swollen/dry mass ratio:** {inputs.mass_ratio:.3f}")
-        st.write(f"**Polymer density:** {inputs.rho_polymer:.3f}")
+        st.write(f"**Polymer density:** {inputs.rho_polymer:.3f} g/cc")
 
     with input_col2:
-        st.write(f"**Solvent density:** {inputs.rho_solvent:.3f}")
+        st.write(f"**Solvent density:** {inputs.rho_solvent:.3f} g/cc")
         st.write(f"**Crystallinity, Xc:** {inputs.polymer_xc:.3f}")
         st.write(f"**CHRIS category:** {inputs.chris_category}")
         st.write(f"**SMILES:** {inputs.smiles if inputs.smiles else 'Not provided'}")
@@ -102,11 +87,19 @@ st.set_page_config(
     layout="wide",
 )
 
+def show_disclaimer() -> None:
+    with st.expander("Research Use Disclaimer", expanded=False):
+        st.write(RESEARCH_USE_DISCLAIMER)
+        st.markdown(
+            "- [CDRH Regulatory Science Tool (RST) Catalog](https://cdrh-rst.fda.gov/)\n"
+            "- [Medical Device Development Tool (MDDT) Program](https://www.fda.gov/medical-devices/medical-device-development-tools-mddt)"
+        )
+
+
 st.title("Swollen Polymer Diffusivity Predictor")
 st.caption(f"A provisional companion predictor accompanying: *{MANUSCRIPT_TITLE}*")
 
-def show_disclaimer() -> None:
-    st.info(RESEARCH_USE_DISCLAIMER)
+show_disclaimer()
 
 st.divider()
 
@@ -176,9 +169,9 @@ elif mode == "Custom System":
         temperature = st.number_input("Temperature, T (K)", value=298.15)
         tg_k = st.number_input("Glass-transition temperature, Tg (K)", value=300.0)
         mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
-        rho_polymer = st.number_input("Polymer density", value=1.05)
+        rho_polymer = st.number_input("Polymer density, g/cc", value=1.05)
     with col2:
-        rho_solvent = st.number_input("Solvent density", value=0.79)
+        rho_solvent = st.number_input("Solvent density, g/cc", value=0.79)
         polymer_xc = st.number_input("Polymer crystallinity, Xc", value=0.0)
         chris_category = st.selectbox("CHRIS category", ["R", "G"], index=0)
         smiles = st.text_input("SMILES preferred", value="CCO")

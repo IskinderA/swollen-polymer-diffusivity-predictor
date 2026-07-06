@@ -133,7 +133,7 @@ allowing direct integration into downstream uncertainty propagation and Monte Ca
 
 This provisional companion predictor accompanies the manuscript
 
-> **Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks** [Citation details will provided as soon as they become available.]
+> **Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks** [Citation details will be provided as soon as they become available.]
 
 
 It is provided by the authors to facilitate reproducibility, exploratory analysis, educational use, and application of the machine-learning models in the current work.
@@ -180,7 +180,7 @@ docs/
 
 If this companion predictor contributes to your work, please cite:
 
-> **Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks** [Citation details will provided as soon as they become available.]
+> **Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks** [Citation details will be provided as soon as they become available.]
 
 ---
 

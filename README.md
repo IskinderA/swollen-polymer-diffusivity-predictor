@@ -5,6 +5,12 @@
 > **Predicting Solute Diffusivity in Swollen Polymer Systems Using Quantile Random Forests and Neural Networks**
 
 ---
+## Launch the Companion Predictor
+
+The interactive companion predictor is available at:
+
+**https://swollen-polymer-diffusivity-predictor.streamlit.app/**
+---
 
 ## Overview
 

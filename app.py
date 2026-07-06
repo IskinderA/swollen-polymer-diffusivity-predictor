@@ -135,6 +135,11 @@ if mode == "Known System":
     with st.container(border=True):
         st.subheader("Known System Information")
 
+        st.success(
+            "System recognized. Properties below were automatically populated "
+            "from the training (i.e., curated Known System) database."
+        )
+
         info_col1, info_col2 = st.columns(2)
 
         with info_col1:
@@ -148,11 +153,6 @@ if mode == "Known System":
     
             st.write(f"**SMILES:** {smiles_value if str(smiles_value) != 'nan' else 'Not available'}")
             st.write(f"**CAS:** {cas_value if str(cas_value) != 'nan' else 'Not available'}")
-
-        st.caption(
-            "These properties were automatically populated"
-            "from the reference modeling dataset (i.e., training dataset)."
-        )
 
     temperature = st.number_input("Temperature, T (K)", value=298.15)
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)

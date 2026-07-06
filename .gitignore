@@ -19,3 +19,8 @@ env/
 # Operating system
 .DS_Store
 Thumbs.db
+
+# Local source data used to build predictor lookup tables
+data/model_refinement_dataset.csv
+data/D_unswollen.csv
+data/note.txt

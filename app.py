@@ -267,29 +267,74 @@ elif mode == "Custom System":
 
 else:
     st.header("Example Systems")
-    st.write("Explore representative examples from the manuscript.")
+    st.write("Explore representative examples using the Known System engine.")
 
-    example = st.selectbox(
-        "Example",
-        ["Moderate rubbery", "Moderate glassy", "PEBAX-like benchmark"],
-    )
+    examples = {
+        "Moderate rubbery": {
+            "polymer": "LDPE",
+            "solvent": "benzene",
+            "solute": "benzene",
+            "temperature_k": 298.15,
+            "mass_ratio": 1.10,
+            "rho_polymer": 0.92,
+            "rho_solvent": 0.87,
+        },
+        "Moderate glassy": {
+            "polymer": "PC",
+            "solvent": "Chloroform",
+            "solute": "Chloroform",
+            "temperature_k": 298.15,
+            "mass_ratio": 1.03,
+            "rho_polymer": 1.20,
+            "rho_solvent": 1.49,
+        },
+        "PEBAX-like benchmark": {
+            "polymer": "PEBAX_4033",
+            "solvent": "Ethanol",
+            "solute": "Solvent Violet 13",
+            "temperature_k": 298.15,
+            "mass_ratio": 1.20,
+            "rho_polymer": 1.01,
+            "rho_solvent": 0.79,
+        },
+    }
 
-    if st.button("Load Example", key="load_example"):
-        st.success(f"Loaded example: {example}")
+    example = st.selectbox("Example", list(examples.keys()))
+    selected = examples[example]
+
+    with st.container(border=True):
+        st.subheader("Example Definition")
+        st.write(f"**Polymer:** {selected['polymer']}")
+        st.write(f"**Solvent:** {selected['solvent']}")
+        st.write(f"**Solute:** {selected['solute']}")
+        st.write(f"**Temperature:** {selected['temperature_k']:.2f} K")
+        st.write(f"**Swollen/dry mass ratio:** {selected['mass_ratio']:.3f}")
+        st.write(f"**Polymer density:** {selected['rho_polymer']:.3f} g/cc")
+        st.write(f"**Solvent density:** {selected['rho_solvent']:.3f} g/cc")
+
+    if st.button("Run Example", key="run_example"):
+        try:
+            system = get_system(
+                selected["polymer"],
+                selected["solvent"],
+                selected["solute"],
+            )
+        except ValueError as exc:
+            st.error(str(exc))
+            st.stop()
 
         inputs = SimplePredictorInputs(
-            temperature_k=298.15,
-            tg_k=250.0,
-            mass_ratio=1.10,
-            rho_polymer=1.05,
-            rho_solvent=0.79,
-            polymer_xc=0.0,
-            chris_category="R1",
-            smiles="CCO",
-            cas="",
+            temperature_k=selected["temperature_k"],
+            tg_k=float(system["Tg_K"]),
+            mass_ratio=selected["mass_ratio"],
+            rho_polymer=selected["rho_polymer"],
+            rho_solvent=selected["rho_solvent"],
+            polymer_xc=float(system["Polymer_Xc"]),
+            chris_category=str(system["CHRIS_Category"]),
+            smiles=str(system["Solute_SMILES"]) if str(system["Solute_SMILES"]) != "nan" else "",
+            cas=str(system["Solute_CAS"]) if str(system["Solute_CAS"]) != "nan" else "",
             n_samples=1000,
         )
 
         pred = predict(inputs)
         show_prediction_summary(pred, inputs)
-

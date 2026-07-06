@@ -41,10 +41,13 @@ def get_solutes(polymer_name: str, solvent_name: str) -> list[str]:
 def get_system(polymer_name: str, solvent_name: str, solute_name: str) -> dict:
     """Return metadata for a selected polymer-solvent-solute system."""
     db = load_known_system_database()
+    def norm(x):
+        return str(x).strip().lower()
+
     subset = db[
-        (db["Polymer_Name"] == polymer_name)
-        & (db["Solvent_Name"] == solvent_name)
-        & (db["Solute_Name"] == solute_name)
+        (db["Polymer_Name"].apply(norm) == norm(polymer_name))
+        & (db["Solvent_Name"].apply(norm) == norm(solvent_name))
+        & (db["Solute_Name"].apply(norm) == norm(solute_name))
     ]
 
     if subset.empty:

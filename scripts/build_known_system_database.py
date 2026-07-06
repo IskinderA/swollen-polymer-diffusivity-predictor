@@ -1,6 +1,36 @@
 from pathlib import Path
 import pandas as pd
 
+def normalize_solute_name(x):
+    if pd.isna(x):
+        return None
+
+    s = str(x).strip().lower()
+    s = s.replace("-", " ")
+    s = s.replace(",", "")
+    s = s.replace("(", " ")
+    s = s.replace(")", " ")
+    s = s.replace("/", " ")
+    s = " ".join(s.split())
+    return s
+
+
+SOLUTE_NAME_ALIASES = {
+    "methylene chloride": "dichloromethane",
+    "p dioxane": "14 dioxane",
+    "p xylene": "pxylene",
+    "co2": "carbon dioxide",
+    "n2": "nitrogen",
+    "neohexane": "22 dimethylbutane",
+    "bht": "26 di tert butyl 4 methylphenol",
+}
+
+
+def apply_solute_alias(x):
+    if x is None:
+        return None
+    return SOLUTE_NAME_ALIASES.get(x, x)
+
 
 REFINEMENT_PATH = Path("../data/model_refinement_dataset.csv")
 UNSWOLLEN_PATH = Path("../data/D_unswollen.csv")
@@ -47,15 +77,25 @@ def main() -> None:
         .rename(columns={"CHRIS Category": "CHRIS_Category"})
     )
 
+    base["Solute_Key"] = base["Solute_Name"].apply(normalize_solute_name).apply(apply_solute_alias)
+
+    smiles_lookup = unswollen[UNSWOLLEN_COLUMNS].copy()
+    smiles_lookup["Solute_Key"] = (
+        smiles_lookup["Solute_Name"]
+        .apply(normalize_solute_name)
+        .apply(apply_solute_alias)
+    )
+
     smiles_lookup = (
-        unswollen[UNSWOLLEN_COLUMNS]
-        .dropna(subset=["Solute_Name"])
-        .drop_duplicates(subset=["Solute_Name"])
+        smiles_lookup
+        .dropna(subset=["Solute_Key"])
+        .drop_duplicates(subset=["Solute_Key"])
+        .drop(columns=["Solute_Name"])
     )
 
     known = base.merge(
         smiles_lookup,
-        on="Solute_Name",
+        on="Solute_Key",
         how="left",
     )
 

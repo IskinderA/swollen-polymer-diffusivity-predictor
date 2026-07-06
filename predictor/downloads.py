@@ -33,6 +33,20 @@ def prediction_summary_csv(
         f"prediction,mlp_p95_log10D,{pred.mlp.p95:.6f}",
     ]
 
+    rows.append("sample,model,sample_index,log10D,D_cm2_s")
+
+    for i, (log10d, d_value) in enumerate(
+        zip(pred.qrf_log10_samples, pred.qrf_D_samples),
+        start=1,
+    ):
+        rows.append(f"sample,QRF,{i},{log10d:.6f},{d_value:.12e}")
+
+    for i, (log10d, d_value) in enumerate(
+        zip(pred.mlp_log10_samples, pred.mlp_D_samples),
+        start=1,
+    ):
+        rows.append(f"sample,MLP,{i},{log10d:.6f},{d_value:.12e}")
+
     return "\n".join(rows) + "\n"
 
 

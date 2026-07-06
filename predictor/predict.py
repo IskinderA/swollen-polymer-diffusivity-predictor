@@ -19,6 +19,10 @@ class PredictionDistribution:
 class PredictionResult:
     qrf: PredictionDistribution
     mlp: PredictionDistribution
+    qrf_log10_samples: list[float]
+    qrf_D_samples: list[float]
+    mlp_log10_samples: list[float]
+    mlp_D_samples: list[float]
 
 @dataclass
 class SimplePredictorInputs:
@@ -60,6 +64,18 @@ def predict(inputs: SimplePredictorInputs) -> PredictionResult:
         **common_kwargs,
     )
 
+    qrf_samples = wrapper.sample_from_simple_interface_qrf(
+        n_samples=inputs.n_samples,
+        random_state=42,
+        **common_kwargs,
+    )
+
+    mlp_samples = wrapper.sample_from_simple_interface_mlp(
+        n_samples=inputs.n_samples,
+        random_state=42,
+        **common_kwargs,
+    )
+
     return PredictionResult(
         qrf=PredictionDistribution(
             p5=qrf_result["log10D_p5"],
@@ -71,4 +87,8 @@ def predict(inputs: SimplePredictorInputs) -> PredictionResult:
             p50=mlp_result["log10D_p50"],
             p95=mlp_result["log10D_p95"],
         ),
+        qrf_log10_samples=qrf_samples["log10D_samples"].tolist(),
+        qrf_D_samples=qrf_samples["D_samples"].tolist(),
+        mlp_log10_samples=mlp_samples["log10D_samples"].tolist(),
+        mlp_D_samples=mlp_samples["D_samples"].tolist(),
     )

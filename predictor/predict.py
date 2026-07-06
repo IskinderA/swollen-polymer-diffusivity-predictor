@@ -1,8 +1,8 @@
 """
 Prediction interface for the Swollen Polymer Diffusivity Predictor.
 
-This module will eventually call the published QRF and MLP ensemble models.
-For now, it returns placeholder predictions used to test the interface.
+This module calls the frozen reference prediction engine used for the
+manuscript models and returns structured QRF and MLP prediction results.
 """
 
 from dataclasses import dataclass

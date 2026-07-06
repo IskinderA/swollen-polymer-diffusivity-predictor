@@ -3,7 +3,7 @@ from predictor.interpretation import classify_model_agreement
 from predictor.downloads import prediction_summary_csv, prediction_summary_json
 from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 from predictor.predict import PredictionResult, SimplePredictorInputs, predict
-from predictor.descriptors import compute_descriptor_placeholders
+from predictor.descriptors import compute_descriptors
 from predictor.known_system import get_polymers, get_solvents, get_solutes, get_system
 
 
@@ -29,7 +29,7 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
         st.write(f"**Samples:** {inputs.n_samples}")
 
     with st.expander("Show computed descriptors"):
-        descriptors = compute_descriptor_placeholders(inputs)
+        descriptors = compute_descriptors(inputs)
         st.json(descriptors)
     
     col1, col2 = st.columns(2)
@@ -56,10 +56,13 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
 
     st.subheader("Interpretation")
     st.write(
-        "These values are placeholder predictions used to test the interface. "
-        "In the final predictor, QRF distributions will be derived from tree-to-tree "
-        "variability, while MLP ensemble distributions will be derived from independently "
-        "trained neural networks with different random seeds."
+        "QRF prediction distributions are derived from tree-to-tree variability "
+        "within the trained random forest. MLP ensemble prediction distributions "
+        "are derived from prediction variability across independently trained "
+        "neural networks initialized with different random seeds. These empirical "
+        "distributions provide complementary representations of prediction "
+        "variability and should not be interpreted as calibrated probabilistic "
+        "confidence intervals."
     )
 
     st.subheader("Downloads")
@@ -69,7 +72,7 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
             pred=pred,
             inputs=inputs,
         ),
-        file_name="prediction_summary_placeholder.csv",
+        file_name="prediction_summary.csv",
         mime="text/csv",
     )
     st.download_button(

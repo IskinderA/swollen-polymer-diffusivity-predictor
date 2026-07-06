@@ -148,14 +148,14 @@ if mode == "Known System":
         with info_col1:
             st.write(f"**Glass-transition temperature (Tg):** {float(system['Tg_K']):.2f} K")
             st.write(f"**Polymer crystallinity (Xc):** {float(system['Polymer_Xc']):.3f}")
-            st.write(f"**CHRIS category:** {system['CHRIS_Category']}")
+            st.write(f"**Polymer CHRIS category:** {system['CHRIS_Category']}")
 
         with info_col2:
             smiles_value = system.get("Solute_SMILES", "")
             cas_value = system.get("Solute_CAS", "")
     
-            st.write(f"**SMILES:** {smiles_value if str(smiles_value) != 'nan' else 'Not available'}")
-            st.write(f"**CAS:** {cas_value if str(cas_value) != 'nan' else 'Not available'}")
+            st.write(f"**Solute/Penetrant SMILES:** {smiles_value if str(smiles_value) != 'nan' else 'Not available'}")
+            st.write(f"**Solute/Penetrant CAS:** {cas_value if str(cas_value) != 'nan' else 'Not available'}")
 
     temperature = st.number_input("Temperature, T (K)", value=298.15)
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
@@ -231,8 +231,8 @@ elif mode == "Custom System":
                 "behavior across rubbers, plastics, and glasses."
             ),
         )
-        smiles = st.text_input("Solute/Penetrant SMILES preferred", value="CCO")
-        cas = st.text_input("Solute/Penetrant CAS optional", value="")
+        smiles = st.text_input("Solute/Penetrant SMILES (preferred)", value="CCO")
+        cas = st.text_input("Solute/Penetrant CAS (optional)", value="")
 
     st.subheader("Prediction Sampling")
     n_samples = st.number_input(

@@ -4,6 +4,7 @@ from predictor.downloads import prediction_summary_csv, prediction_summary_json
 from predictor.utilities import MANUSCRIPT_TITLE, RESEARCH_USE_DISCLAIMER
 from predictor.predict import PredictionResult, SimplePredictorInputs, predict
 from predictor.descriptors import compute_descriptor_placeholders
+from predictor.known_system import get_polymers, get_solvents, get_solutes, get_system
 
 
 def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInputs) -> None:
@@ -116,15 +117,57 @@ if mode == "Known System":
     st.write("Select a curated polymer–solvent–solute system.")
 
     col1, col2, col3 = st.columns(3)
+
     with col1:
-        polymer = st.selectbox("Polymer", ["PEBAX 4033", "HDPE", "LDPE", "PVC"], index=0)
+        polymer = st.selectbox("Polymer", get_polymers(), index=0)
+
     with col2:
-        solvent = st.selectbox("Solvent", ["Ethanol", "Isopropanol", "Water"], index=0)
+        solvent_options = get_solvents(polymer)
+        solvent = st.selectbox("Solvent", solvent_options, index=0)
+
     with col3:
-        solute = st.selectbox("Solute", ["Solvent Violet 13", "Ethanol"], index=0)
+        solute_options = get_solutes(polymer, solvent)
+        solute = st.selectbox("Solute", solute_options, index=0)
+
+    # Retrieve information for the selected known system
+    system = get_system(polymer, solvent, solute)
+
+    with st.container(border=True):
+        st.subheader("Known System Information")
+
+        info_col1, info_col2 = st.columns(2)
+
+        with info_col1:
+            st.write(f"**Glass-transition temperature (Tg):** {float(system['Tg_K']):.2f} K")
+            st.write(f"**Polymer crystallinity (Xc):** {float(system['Polymer_Xc']):.3f}")
+            st.write(f"**CHRIS category:** {system['CHRIS_Category']}")
+
+        with info_col2:
+            smiles_value = system.get("Solute_SMILES", "")
+            cas_value = system.get("Solute_CAS", "")
+    
+            st.write(f"**SMILES:** {smiles_value if str(smiles_value) != 'nan' else 'Not available'}")
+            st.write(f"**CAS:** {cas_value if str(cas_value) != 'nan' else 'Not available'}")
+
+        st.caption(
+            "These properties were automatically populated"
+            "from the reference modeling dataset (i.e., training dataset)."
+        )
 
     temperature = st.number_input("Temperature, T (K)", value=298.15)
     mass_ratio = st.number_input("Swollen/dry mass ratio", value=1.10)
+
+    rho_polymer = st.number_input(
+        "Polymer density (g/cc)",
+        value=1.05,
+        key="known_rho_polymer",
+    )
+
+    rho_solvent = st.number_input(
+        "Solvent density (g/cc)",
+        value=0.79,
+        key="known_rho_solvent",
+    )
 
     st.subheader("Prediction Sampling")
     n_samples = st.number_input(
@@ -145,16 +188,18 @@ if mode == "Known System":
     )
 
     if st.button("Predict", key="known_predict"):
+        system = get_system(polymer, solvent, solute)
+
         inputs = SimplePredictorInputs(
             temperature_k=temperature,
-            tg_k=300.0,
+            tg_k=float(system["Tg_K"]),
             mass_ratio=mass_ratio,
-            rho_polymer=1.05,
-            rho_solvent=0.79,
-            polymer_xc=0.0,
-            chris_category="R1",
-            smiles="CCO",
-            cas="",
+            rho_polymer=rho_polymer,
+            rho_solvent=rho_solvent,
+            polymer_xc=float(system["Polymer_Xc"]),
+            chris_category=str(system["CHRIS_Category"]),
+            smiles=str(system["Solute_SMILES"]) if system.get("Solute_SMILES") else "",
+            cas=str(system["Solute_CAS"]) if system.get("Solute_CAS") else "",
             n_samples=n_samples,
         )
         pred = predict(inputs)

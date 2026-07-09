@@ -36,15 +36,15 @@ def show_prediction_summary(pred: PredictionResult, inputs: SimplePredictorInput
 
     with col1:
         st.subheader("QRF Prediction Distribution")
-        st.metric("5th percentile log10(D)", f"{pred.qrf.p5:.3f}")
-        st.metric("Median log10(D)", f"{pred.qrf.p50:.3f}")
-        st.metric("95th percentile log10(D)", f"{pred.qrf.p95:.3f}")
+        st.metric("5th percentile log10(D) [cm²/s]", f"{pred.qrf.p5:.3f}")
+        st.metric("Median log10(D) [cm²/s]", f"{pred.qrf.p50:.3f}")
+        st.metric("95th percentile log10(D) [cm²/s]", f"{pred.qrf.p95:.3f}")
 
     with col2:
         st.subheader("MLP Ensemble Prediction Distribution")
-        st.metric("5th percentile log10(D)", f"{pred.mlp.p5:.3f}")
-        st.metric("Median log10(D)", f"{pred.mlp.p50:.3f}")
-        st.metric("95th percentile log10(D)", f"{pred.mlp.p95:.3f}")
+        st.metric("5th percentile log10(D) [cm²/s]", f"{pred.mlp.p5:.3f}")
+        st.metric("Median log10(D) [cm²/s]", f"{pred.mlp.p50:.3f}")
+        st.metric("95th percentile log10(D) [cm²/s]", f"{pred.mlp.p95:.3f}")
 
     delta = abs(pred.qrf.p50 - pred.mlp.p50)
     agreement_label, agreement_text = classify_model_agreement(delta)
@@ -90,6 +90,14 @@ st.set_page_config(
     page_title="Swollen Polymer Diffusivity Predictor",
     layout="wide",
 )
+
+st.markdown("""
+<style>
+div[data-testid="stMetricValue"] {
+    font-size: 2.0rem;
+}
+</style>
+""", unsafe_allow_html=True)
 
 def show_disclaimer() -> None:
     with st.expander("Research Use Disclaimer", expanded=False):

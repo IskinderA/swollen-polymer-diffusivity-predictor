@@ -94,7 +94,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 div[data-testid="stMetricValue"] {
-    font-size: 2.0rem;
+    font-size: 1.0rem;
 }
 </style>
 """, unsafe_allow_html=True)

@@ -5,3 +5,6 @@ joblib
 matplotlib
 scikit-learn==1.7.2
 rdkit
+pubchempy
+cirpy
+chemicals

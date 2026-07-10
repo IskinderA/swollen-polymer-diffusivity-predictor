@@ -205,4 +205,6 @@ Current development milestone:
 - Known System database integrated
 - Real-time prediction sampling implemented
 
+Deployment note: The companion predictor has been validated using Python 3.11. If deploying to Streamlit Community Cloud, select Python 3.11 during deployment to ensure compatibility with RDKit.
+
 Future releases will continue to expand the curated Known System database and additional transport-property prediction capabilities while preserving the frozen reference prediction engine accompanying the manuscript.

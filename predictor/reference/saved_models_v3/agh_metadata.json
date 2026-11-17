@@ -1,0 +1,38 @@
+{
+  "architecture": "Baseline AGH",
+  "routing_rule": "MLP if Mahalanobis distance < cutoff; QRF otherwise",
+  "mahalanobis_cutoff": 5.615144255020377,
+  "cutoff_learning": {
+    "population": "2095-row deployment population",
+    "validation_design": "28-fold ordinary leave-one-polymer-out",
+    "selection_objective": "minimum pooled observation-level RMSE; then MAE; then smaller threshold rank",
+    "rmse": 0.9319257585296357,
+    "mae": 0.691867928809259,
+    "selected_mlp_n": 2034,
+    "selected_qrf_n": 61,
+    "selected_mlp_fraction": 0.9708830548926014,
+    "threshold_rank": 2006,
+    "n_threshold_candidates": 2068
+  },
+  "mahalanobis_definition": {
+    "numeric_features": [
+      "T_over_Tg",
+      "Tg_K",
+      "solute_MW",
+      "volume_fraction",
+      "mass_fraction",
+      "Qv-1",
+      "Qw-1",
+      "Polymer_Xc"
+    ],
+    "categorical_features_excluded": [
+      "CHRIS Category"
+    ],
+    "preprocessing": "median imputation + StandardScaler fitted on training domain",
+    "inverse": "numpy.linalg.pinv",
+    "reference_artifact": "saved_models/mahalanobis_reference.joblib"
+  },
+  "procedure_validation_note": "AGH procedure was validated by fully nested polymer-group validation on the frozen manuscript population; this production cutoff is estimated from ordinary LOPO predictions of the current deployment population.",
+  "training_dataset_project_path": "ML_swollen/version_12/deployment_training_data.csv",
+  "generated_utc": "2026-11-10T15:44:11.512604+00:00"
+}

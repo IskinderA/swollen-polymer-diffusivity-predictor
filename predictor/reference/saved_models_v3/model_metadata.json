@@ -1,0 +1,62 @@
+{
+  "script_version": "12",
+  "headline_predictor": "Baseline AGH",
+  "target": "log10D",
+  "training_dataset_project_path": "ML_swollen/version_12/deployment_training_data.csv",
+  "training_rows": 2095,
+  "training_polymers": 28,
+  "primary_manuscript_rows": 2032,
+  "elder2025_dataset_a_rows": 63,
+  "numeric_features": [
+    "T_over_Tg",
+    "Tg_K",
+    "solute_MW",
+    "volume_fraction",
+    "mass_fraction",
+    "Qv-1",
+    "Qw-1",
+    "Polymer_Xc"
+  ],
+  "categorical_features": [
+    "CHRIS Category"
+  ],
+  "qrf_model_file": "saved_models/qrf_pipeline.joblib",
+  "mlp_model_file": "saved_models/mlp_128_64_pipeline.joblib",
+  "mlp_ensemble_dir": "saved_models/mlp_ensemble",
+  "mahalanobis_reference_file": "saved_models/mahalanobis_reference.joblib",
+  "agh_metadata_file": "saved_models/agh_metadata.json",
+  "deployment_lopo": {
+    "folds": 28,
+    "rows": 2095,
+    "performance": {
+      "qrf": {
+        "n": 2095,
+        "rmse": 1.1437373687230405,
+        "mae": 0.8726525235353354,
+        "median_abs_error": 0.6698372775515766,
+        "within_1_log_fraction": 0.6749403341288783,
+        "errors_gt_2_log_fraction": 0.08496420047732697,
+        "max_abs_error": 4.040481623027002
+      },
+      "mlp": {
+        "n": 2095,
+        "rmse": 0.9409837582690219,
+        "mae": 0.6981225284961482,
+        "median_abs_error": 0.49367875369409475,
+        "within_1_log_fraction": 0.7446300715990454,
+        "errors_gt_2_log_fraction": 0.05250596658711217,
+        "max_abs_error": 4.457242611501793
+      },
+      "agh": {
+        "n": 2095,
+        "rmse": 0.9319257585296341,
+        "mae": 0.6918679288092584,
+        "median_abs_error": 0.488451385921981,
+        "within_1_log_fraction": 0.7455847255369928,
+        "errors_gt_2_log_fraction": 0.052028639618138424,
+        "max_abs_error": 3.7993822410514966
+      }
+    }
+  },
+  "scientific_boundary": "Prospective deployment model; manuscript validation remains frozen to the 2032-observation primary dataset."
+}

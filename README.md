@@ -16,7 +16,7 @@ The interactive companion predictor is available at:
 
 ## Overview
 
-![Swollen Polymer Diffusivity Predictor](assets/screenshots/overview.png)
+![Swollen Polymer Diffusivity Predictor](assets/screenshots/WebInterface.png)
 
 The **Swollen Polymer Diffusivity Predictor** provides an interactive implementation of the machine-learning framework developed for predicting solute diffusivity in swollen polymer systems.
 
